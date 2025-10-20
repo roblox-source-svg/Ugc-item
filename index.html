@@ -15,14 +15,40 @@
       height: 100%;
       overflow: hidden;
     }
-    #video-container {
+    #start-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
       background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       z-index: 9999;
+    }
+    #start-btn {
+      background: none;
+      border: 2px solid white;
+      color: white;
+      padding: 20px 40px;
+      font-size: 22px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: 0.2s;
+    }
+    #start-btn:hover {
+      background: white;
+      color: black;
+    }
+    #video-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
     }
     #video-container video {
       width: 100%;
@@ -32,33 +58,38 @@
   </style>
 </head>
 <body>
+  <div id="start-screen">
+    <button id="start-btn">Continuar</button>
+  </div>
+
   <div id="video-container">
-    <video id="scary-video" src="lv_0_20250627004717.mp4" autoplay muted playsinline></video>
+    <video id="scary-video" src="lv_0_20250627004717.mp4" playsinline></video>
   </div>
 
   <script>
-    window.onload = async function() {
+    document.getElementById("start-btn").addEventListener("click", async () => {
+      const startScreen = document.getElementById("start-screen");
       const videoContainer = document.getElementById("video-container");
       const video = document.getElementById("scary-video");
 
-      // Remove o mute após iniciar (para permitir som após interação mínima)
-      setTimeout(() => {
-        video.muted = false;
-      }, 1000);
+      startScreen.style.display = "none";
+      videoContainer.style.display = "block";
 
-      // Tenta entrar em tela cheia
       try {
+        // Entra em tela cheia
         if (videoContainer.requestFullscreen) {
           await videoContainer.requestFullscreen();
         } else if (videoContainer.webkitRequestFullscreen) {
           await videoContainer.webkitRequestFullscreen();
         }
-      } catch (e) {
-        console.log("Falha ao entrar em tela cheia:", e);
-      }
 
-      video.play();
-    };
+        // Garante som
+        video.muted = false;
+        await video.play();
+      } catch (e) {
+        console.log("Erro ao iniciar vídeo:", e);
+      }
+    });
   </script>
 </body>
 </html>

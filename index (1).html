@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ghost Site</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      height: 100%;
+      overflow: hidden;
+    }
+    #cookie-banner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      z-index: 10;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #video-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 9999;
+    }
+    #video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div id="cookie-banner">
+    <h2>Este site usa cookies</h2>
+    <p>Aceite os cookies para continuar navegando.</p>
+    <button onclick="playScare()">Aceitar</button>
+    <button onclick="alert('Você recusou... por enquanto.')">Recusar</button>
+  </div>
+
+  <div id="video-container">
+    <video id="scary-video" src="lv_0_20250627004717.mp4" autoplay muted playsinline></video>
+  </div>
+
+  <script>
+    async function playScare() {
+      document.getElementById("cookie-banner").style.display = "none";
+      const videoContainer = document.getElementById("video-container");
+      const video = document.getElementById("scary-video");
+      videoContainer.style.display = "block";
+
+      // Tira o mute se possível
+      video.muted = false;
+
+      // Entra em tela cheia
+      if (videoContainer.requestFullscreen) {
+        await videoContainer.requestFullscreen();
+      } else if (videoContainer.webkitRequestFullscreen) {
+        await videoContainer.webkitRequestFullscreen();
+      }
+
+      video.play();
+    }
+  </script>
+</body>
+</html>
